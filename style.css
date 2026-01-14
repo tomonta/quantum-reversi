@@ -1,0 +1,527 @@
+:root {
+    --bg-color: #1a1a1a;
+    --board-color: #2e7d32;
+    --board-border: #1b5e20;
+    --line-color: #000000;
+    --cell-border: #388e3c;
+    --text-color: #e0e0e0;
+    --accent-color: #66bb6a;
+    --highlight-color: rgba(102, 187, 106, 0.3);
+
+    --piece-black: #111;
+    --piece-white: #eee;
+    --shadow-black: rgba(0, 0, 0, 0.5);
+    --shadow-white: rgba(0, 0, 0, 0.2);
+
+    --font-main: 'Outfit', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+}
+
+header {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.header-top h1 {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.lang-select {
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1px solid #444;
+    background: #222;
+    color: #ccc;
+    font-family: var(--font-main);
+    cursor: pointer;
+    font-size: 0.9rem;
+
+
+    border: 1px solid #444;
+    background: #222;
+    color: #ccc;
+    font-family: var(--font-main);
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.lobby-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.lobby-overlay.hidden,
+.game-container.hidden {
+    display: none;
+}
+
+.lobby-card {
+    background: #2a2a2a;
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 90%;
+    width: 400px;
+}
+
+.lobby-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.join-section {
+    display: flex;
+    gap: 10px;
+}
+
+input[type="text"] {
+    background: #333;
+    border: 1px solid #555;
+    padding: 10px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: var(--font-main);
+    flex-grow: 1;
+}
+
+.btn.secondary {
+    background-color: #555;
+    color: #fff;
+}
+
+.game-info-display {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--accent-color);
+}
+
+#turn-indicator {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    /* Changed from --accent-primary to --accent-color as it's defined */
+}
+
+.notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-family: var(--font-main);
+    z-index: 2000;
+    pointer-events: none;
+    border: 1px solid var(--accent-color);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    animation: fadeInOut 2s ease-in-out;
+    text-align: center;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -40%); }
+    10% { opacity: 1; transform: translate(-50%, -50%); }
+    90% { opacity: 1; transform: translate(-50%, -50%); }
+    100% { opacity: 0; transform: translate(-50%, -60%); }
+}
+
+.notification.hidden {
+    display: none;
+}
+
+.score-board {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.score-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.score-card.active {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.player-black .indicator {
+    background: var(--piece-black);
+    border: 1px solid #333;
+}
+
+.player-white .indicator {
+    background: var(--piece-white);
+    border: 1px solid #ccc;
+}
+
+.label {
+    font-weight: 300;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.score {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.status-message {
+    height: 1.5em;
+    font-weight: 300;
+    color: #ccc;
+    font-style: italic;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: var(--line-color);
+    border: 8px solid var(--board-border);
+    border-radius: 4px;
+    padding: 4px;
+    gap: 2px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.cell {
+    position: relative;
+    background-color: var(--board-color);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.cell::after {
+    /* Grid lines using a pseudo-element if gap isn't enough, but gap works nicely with background color */
+    /* optional subtle grid patterns */
+}
+
+/* Valid move hint */
+.cell.valid-move::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20%;
+    height: 20%;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+}
+
+.cell.valid-move:hover::before {
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 30%;
+    height: 30%;
+    transition: all 0.2s;
+}
+
+.piece {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.piece.black {
+    background: radial-gradient(circle at 30% 30%, #444, #000);
+    box-shadow: 2px 2px 4px var(--shadow-black);
+}
+
+.piece.white {
+    background: radial-gradient(circle at 30% 30%, #fff, #bbb);
+    box-shadow: 2px 2px 4px var(--shadow-white);
+}
+
+/* Animation for placing a piece */
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.piece.new {
+    animation: popIn 0.3s ease-out forwards;
+}
+
+/* Footer & Buttons */
+footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    background-color: var(--accent-color);
+    color: #1a1a1a;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: var(--font-main);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    .board {
+        border-width: 4px;
+    }
+
+    .score {
+        font-size: 1.2rem;
+    }
+}
+
+.version-badge {
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Help Button & Modal */
+.btn-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--text-primary);
+    background: transparent;
+    color: var(--text-primary);
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    transition: all 0.2s;
+}
+
+.btn-icon:hover {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: var(--text-primary);
+}
+
+#help-body h3 {
+    margin-top: 1rem;
+    color: var(--accent-primary);
+}
+
+#help-body ul {
+    padding-left: 20px;
+    margin-bottom: 1rem;
+}
+
+#help-body li {
+    margin-bottom: 0.5rem;
+}
+
+/* Quantum Styling */
+.quantum-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 15px;
+}
+
+.control-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-small {
+    background: #444;
+    color: #ccc;
+    border: 1px solid #666;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.btn-small.active {
+    background: var(--accent-color);
+    color: #000;
+    border-color: var(--accent-color);
+    font-weight: bold;
+}
+
+.btn-small:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #333;
+}
+
+.btn-observe {
+    background: #7c4dff;
+    /* Purple for quantum */
+    color: white;
+    border-color: #651fff;
+}

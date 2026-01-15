@@ -20,6 +20,7 @@ class Reversi {
         this.statusEl = document.getElementById('status-message');
         this.restartBtn = document.getElementById('restart-btn');
         this.langSelect = document.getElementById('lang-select');
+        this.lobbyLangSelect = document.getElementById('lobby-lang-select');
 
         // Multiplayer DOM
         this.lobbyOverlay = document.getElementById('lobby');
@@ -76,7 +77,7 @@ class Reversi {
 
         this.translations = {
             en: {
-                title: 'QUANTUM REVERSI',
+                title: 'Quversi',
                 black: 'Black',
                 white: 'White',
                 newGame: 'New Game',
@@ -102,8 +103,15 @@ class Reversi {
                         <li><strong>70%</strong>: Can be placed anywhere. (Stable foundation)</li>
                         <li><strong>90%</strong>: Placeable if you have fewer 90s than 70s.</li>
                         <li><strong>100%</strong>: Placeable if fewer 100s than 90s AND your last move was a 70% piece.</li>
-                        <li>Observation does NOT trigger sandwiches.</li>
                     </ul>
+                    <h3>Observation (The Key!)</h3>
+                    <p><strong>Placing pieces (even 70%/90%) instantly flips opponent's pieces</strong> just like normal Reversi.</p>
+                    <p>However, <strong>Observe</strong> (button) forces all quantum pieces (70% & 90%) to "collapse" to a single color (or disappear) based on their probability.</p>
+                    <ul>
+                        <li><strong>90% Piece</strong>: 10% chance to flip color when observed.</li>
+                        <li><strong>70% Piece</strong>: 30% chance to flip color when observed.</li>
+                    </ul>
+                    <p>You have <strong>2 Observations</strong> per game. Use them wisely to potentially disrupt your opponent's board!</p>
                 `,
                 // Lobby Status
                 creatingGame: "Creating game...",
@@ -115,9 +123,13 @@ class Reversi {
 
                 // New UI
                 lobbyTitle: "Game Lobby",
+                lobbyStatus: "Select a mode to start",
+                createGame: "Start Game",
+                joinGame: "Join",
                 modeLabel: "Mode:",
                 modePvP: "Online PvP",
                 modeCpuEasy: "CPU (Easy)",
+                modeCpuNormal: "CPU (Normal)",
                 modeCpuHard: "CPU (Hard)",
                 turnLabel: "Your Turn:",
                 turnBlack: "First (Black)",
@@ -132,7 +144,7 @@ class Reversi {
                 restart: "Restart Game"
             },
             ja: {
-                title: '量子リバーシ',
+                title: 'Quversi',
                 black: '黒',
                 white: '白',
                 newGame: '新しいゲーム',
@@ -151,15 +163,22 @@ class Reversi {
                 offline: '対戦相手：オフライン ⚪',
                 observe: (count) => `観測 (${count})`,
                 passMsg: '置ける場所がありません！パスします...',
-                helpTitle: '量子リバーシのルール',
+                helpTitle: 'Quversiのルール',
                 helpContent: `
                     <h3>コマの種類</h3>
                     <ul>
                         <li><strong>70%コマ</strong>: いつでも置けます（土台になります）。</li>
                         <li><strong>90%コマ</strong>: 盤面の「自分の70%コマ」より少ない時だけ置けます。</li>
                         <li><strong>100%コマ</strong>: 盤面の「自分の90%コマ」より少なく、かつ<em>自分の一つ前の手が70%コマ</em>の時だけ置けます。</li>
-                        <li>※観測による色変化では「挟み」は発生しません。</li>
                     </ul>
+                    <h3>「観測」について (重要！)</h3>
+                    <p><strong>70%コマや90%コマを置いた際も、通常のリバーシ同様に相手のコマを挟んでひっくり返せます。</strong></p>
+                    <p><strong>「観測」ボタン</strong>を押すと、盤上のすべての量子コマ（70%, 90%）の状態が確定します。</p>
+                    <ul>
+                        <li><strong>90%コマ</strong>: 10%の確率で色が反転します。</li>
+                        <li><strong>70%コマ</strong>: 30%の確率で色が反転します。</li>
+                    </ul>
+                    <p>観測は1ゲームにつき<strong>2回</strong>まで使えます。相手の計算を狂わせる強力な武器です！</p>
                 `,
                 // Lobby Status
                 creatingGame: "ゲームを作成中...",
@@ -171,9 +190,13 @@ class Reversi {
 
                 // New UI
                 lobbyTitle: "ゲームロビー",
+                lobbyStatus: "対戦モードを選択してください",
+                createGame: "ゲーム開始",
+                joinGame: "参加",
                 modeLabel: "対戦モード:",
                 modePvP: "オンライン対戦",
                 modeCpuEasy: "CPU (かんたん)",
+                modeCpuNormal: "CPU (ふつう)",
                 modeCpuHard: "CPU (むずかしい)",
                 turnLabel: "自分の手番:",
                 turnBlack: "先手 (黒)",
@@ -212,9 +235,22 @@ class Reversi {
         this.lastMoveType = { [BLACK]: null, [WHITE]: null };
 
         this.restartBtn.addEventListener('click', () => this.resetGame());
-        this.langSelect.addEventListener('change', (e) => this.setLanguage(e.target.value));
+        // Language Selector
+        const handleLangChange = (e) => {
+            const newLang = e.target.value;
+            this.setLanguage(newLang);
+            // Sync selectors
+            if (this.langSelect) this.langSelect.value = newLang;
+            if (this.lobbyLangSelect) this.lobbyLangSelect.value = newLang;
+        };
 
-        // Multiplayer Listeners
+        if (this.langSelect) {
+            this.langSelect.addEventListener('change', handleLangChange);
+        }
+
+        if (this.lobbyLangSelect) {
+            this.lobbyLangSelect.addEventListener('change', handleLangChange);
+        }// Multiplayer Listeners
         this.createGameBtn.addEventListener('click', () => this.createGame());
         this.joinGameBtn.addEventListener('click', () => this.joinGame());
 
@@ -545,12 +581,17 @@ class Reversi {
 
                 } else {
                     // Pass
-                    this.showPassNotification();
-                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    const cpuRoleName = (this.currentPlayer === BLACK) ?
+                        this.translations[this.currentLang].black :
+                        this.translations[this.currentLang].white;
+
+                    this.showNotification(this.translations[this.currentLang].pass(cpuRoleName));
+
+                    await new Promise(resolve => setTimeout(resolve, 2000));
 
                     this.currentPlayer = this.currentPlayer === BLACK ? WHITE : BLACK;
                     this.updateDB();
-                    this.hidePassNotification();
+                    // No need to hidePassNotification as we used showNotification (toast)
                     turnActive = false; // Turn Ends
                 }
             }
@@ -972,6 +1013,11 @@ class Reversi {
         this.scoreBlackEl.textContent = blackScore;
         this.scoreWhiteEl.textContent = whiteScore;
 
+        const obsBlackEl = document.getElementById('obs-black');
+        const obsWhiteEl = document.getElementById('obs-white');
+        if (obsBlackEl) obsBlackEl.textContent = `👁️ ${this.observationsLeft[BLACK]}`;
+        if (obsWhiteEl) obsWhiteEl.textContent = `👁️ ${this.observationsLeft[WHITE]}`;
+
         document.querySelector('.player-black').classList.toggle('active', this.currentPlayer === BLACK);
         document.querySelector('.player-white').classList.toggle('active', this.currentPlayer === WHITE);
 
@@ -997,18 +1043,6 @@ class Reversi {
         }
     }
 
-    showPassNotification() {
-        if (!this.passNotification) return;
-        const msg = this.translations[this.currentLang].passMsg || "Passing...";
-        this.passNotification.textContent = msg;
-        this.passNotification.classList.remove('hidden');
-    }
-
-    hidePassNotification() {
-        if (this.passNotification) {
-            this.passNotification.classList.add('hidden');
-        }
-    }
 
     endGame(winner) {
         this.gameOver = true;

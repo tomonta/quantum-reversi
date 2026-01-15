@@ -13,7 +13,7 @@
     --shadow-black: rgba(0, 0, 0, 0.5);
     --shadow-white: rgba(0, 0, 0, 0.2);
 
-    --font-main: 'Outfit', sans-serif;
+    --font-main: 'Montserrat', sans-serif;
 }
 
 * {
@@ -53,20 +53,39 @@ header {
 }
 
 .header-top {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     width: 100%;
     position: relative;
 }
 
-.header-top h1 {
-    flex-grow: 1;
-    text-align: center;
-    font-weight: 600;
-    letter-spacing: 2px;
-    color: var(--accent-color);
+.logo-wrapper {
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.header-controls {
+    grid-column: 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+}
+
+.game-logo {
+    width: 180px;
+    /* Explicit width prevents grid collapse */
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+/* Remove old specific selector if exists, or just ensure this works */
+/* .header-top .game-logo rule is replaced by wrapper logic */
 
 .lang-select {
     padding: 5px 10px;
@@ -253,6 +272,27 @@ main {
     gap: 15px;
 }
 
+/* New Lobby Styles */
+.lobby-logo {
+    width: 60%;
+    max-width: 250px;
+    height: auto;
+    margin: 10px auto 20px;
+    display: block;
+}
+
+.lobby-header-bar {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.hidden-title {
+    display: none;
+    /* Hide the text title since we have the logo */
+}
+
 .join-section {
     display: flex;
     gap: 10px;
@@ -412,6 +452,18 @@ input[type="text"] {
 .score {
     font-weight: 600;
     font-size: 1.5rem;
+}
+
+.obs-indicator {
+    font-size: 0.8rem;
+    color: #ccc;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .status-message {
@@ -583,4 +635,23 @@ footer {
 .btn-icon:hover {
     background: #e0e0e0;
     color: #1a1a1a;
+}
+
+/* Header Stack on Mobile */
+@media (max-width: 600px) {
+    .header-top {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .logo-wrapper {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .header-controls {
+        width: 100%;
+        justify-content: center;
+    }
 }

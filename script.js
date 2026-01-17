@@ -69,6 +69,9 @@ class Reversi {
 
         // Debug Listener
         document.addEventListener('keydown', (e) => {
+            // Ignore if typing in an input field (e.g. Room ID)
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
             if (e.key === 'd' || e.key === 'D') {
                 if (confirm(this.translations[this.currentLang].confirmExport || "Export debug data?")) {
                     if (this.exportDebugData) this.exportDebugData();
@@ -590,6 +593,8 @@ class Reversi {
             if (data.lastMoveType) this.lastMoveType = data.lastMoveType;
             if (data.hasUsed50) this.hasUsed50 = data.hasUsed50; // Sync 50-koma usage
             if (data.enable50Koma !== undefined) this.enable50Koma = data.enable50Koma; // Sync 50-koma setting
+            if (data.currentTurn !== undefined) this.currentTurn = data.currentTurn; // Sync Turn Count
+            if (data.gameMode) this.gameMode = data.gameMode; // Sync Game Mode
 
             // Sync Board UI
             this.refreshBoardDisplay();
@@ -843,7 +848,8 @@ class Reversi {
             observationsLeft: this.observationsLeft,
             hasUsed50: this.hasUsed50, // Sync usage
             lastMoveType: this.lastMoveType || {},
-            enable50Koma: this.enable50Koma // Persist 50-koma setting
+            enable50Koma: this.enable50Koma, // Persist 50-koma setting
+            currentTurn: this.currentTurn // Sync turn count
         });
     }
 
@@ -1194,6 +1200,7 @@ class Reversi {
 
     // Modified to use updateDB and Quantum Objects
     executeMove(r, c, player, pieceType = null) {
+        this.currentTurn++; // Track Turns
         const type = pieceType !== null ? pieceType : (this.selectedType || 70);
         // All new pieces start as "Unobserved" (Active in the stack), 
         // even 100% pieces (which are 0% risk but count towards the limit until observed).
@@ -1215,42 +1222,42 @@ class Reversi {
                 type: type,
                 observed: isObserved
             };
+        }
 
-            // Flip logic (State update)
-            const opponent = player === BLACK ? WHITE : BLACK;
-            const directions = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+        // Flip logic (State update) - Shared for both Normal and 50-koma (Universal Anchor)
+        const opponent = player === BLACK ? WHITE : BLACK;
+        const directions = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
 
-            for (const [dr, dc] of directions) {
-                let tr = r + dr, tc = c + dc;
-                let path = [];
-                while (tr >= 0 && tr < BOARD_SIZE && tc >= 0 && tc < BOARD_SIZE) {
-                    const cell = this.board[tr][tc];
-                    // Relay Logic Check:
-                    // If cell is opponent color -> continue (sandwiching)
-                    // If cell is MY color OR MY 50-koma -> Anchor found -> Flip path
+        for (const [dr, dc] of directions) {
+            let tr = r + dr, tc = c + dc;
+            let path = [];
+            while (tr >= 0 && tr < BOARD_SIZE && tc >= 0 && tc < BOARD_SIZE) {
+                const cell = this.board[tr][tc];
+                // Relay Logic Check:
+                // If cell is opponent color -> continue (sandwiching)
+                // If cell is MY color OR MY 50-koma -> Anchor found -> Flip path
 
-                    if (cell && cell.color === opponent) {
-                        path.push([tr, tc]);
-                    } else if (cell && (cell.color === player || cell.type === 50)) {
-                        // Anchor Found! (Any 50-koma counts as anchor)
-                        // Flip all in path.
-                        // IMPORTANT: 50-koma itself is NOT flipped.
-                        // It must be a continuous line of Opponent's COLORED pieces.
+                if (cell && cell.color === opponent) {
+                    path.push([tr, tc]);
+                } else if (cell && (cell.color === player || cell.type === 50)) {
+                    // Anchor Found! (Any 50-koma counts as anchor)
+                    // Flip all in path.
+                    // IMPORTANT: 50-koma itself is NOT flipped.
+                    // It must be a continuous line of Opponent's COLORED pieces.
 
-                        path.forEach(([pr, pc]) => {
-                            const p = this.board[pr][pc];
-                            // Double check handling
-                            if (p.type !== 50) { // Ensure we don't flip an opponent's 50-koma if it somehow got into the path (it shouldn't based on the break logic)
-                                p.color = player;
-                            }
-                        });
-                        break;
-                    } else {
-                        // Gray (Un-owned or Opponent's 50) or Null -> Break
-                        break;
-                    }
-                    tr += dr; tc += dc;
+                    path.forEach(([pr, pc]) => {
+                        const p = this.board[pr][pc];
+                        // Double check handling
+                        if (p.type !== 50) { // Ensure we don't flip an opponent's 50-koma if it somehow got into the path (it shouldn't based on the break logic)
+                            p.color = player;
+                        }
+                    });
+                    break;
+                } else {
+                    // Gray (Un-owned or Opponent's 50) or Null -> Break
+                    break;
                 }
+                tr += dr; tc += dc;
             }
         }
 

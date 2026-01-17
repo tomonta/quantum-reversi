@@ -103,6 +103,15 @@
                     <option value="random" data-i18n="turnRandom">Random</option>
                 </select>
 
+                <div class="lobby-option"
+                    style="display: flex; align-items: center; justify-content: center; margin-top: 10px;">
+                    <label for="toggle-50koma" id="toggle-50koma-label"
+                        style="color: #ccc; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; flex-direction: row !important; white-space: nowrap;">
+                        <input type="checkbox" id="toggle-50koma" checked style="margin: 0;">
+                        <span data-i18n="enable50Koma">Enable 50% Koma</span>
+                    </label>
+                </div>
+
                 <button id="create-game-btn" class="btn" data-i18n="createGame">Start Game</button>
 
                 <div class="join-divider" data-i18n="or">OR</div>
@@ -205,9 +214,13 @@
             <!-- Quantum Controls -->
             <div id="quantum-controls" class="quantum-controls">
                 <div class="control-group">
+                    <button id="btn-50" class="btn-small">50%</button>
                     <button id="btn-70" class="btn-small">70%</button>
                     <button id="btn-90" class="btn-small">90%</button>
                     <button id="btn-100" class="btn-small active">100%</button>
+                    <button id="btn-pass" class="btn-small hidden"
+                        style="background: #f39c12; color: white; width: auto; padding: 0 12px; font-size: 0.85rem; border: 1px solid #e67e22;"
+                        title="No normal moves. Skip to save 50-koma.">Skip (Save 50%)</button>
                 </div>
                 <div class="control-group">
                     <button id="btn-observe" class="btn-small btn-observe">Observe (2)</button>

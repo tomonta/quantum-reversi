@@ -376,6 +376,13 @@ input[type="text"] {
     box-shadow: 2px 2px 4px var(--shadow-white);
 }
 
+.piece.gray {
+    background: radial-gradient(circle at 30% 30%, #aaa, #666);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    color: #fff !important;
+    /* Force white text for visibility */
+}
+
 @keyframes popIn {
     0% {
         transform: scale(0);

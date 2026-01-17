@@ -1,8 +1,18 @@
 window.CpuHard = class CpuHard {
     constructor(game) {
         this.game = game;
-        this.MAX_DEPTH = 3; // Lookahead depth
+        this.MAX_DEPTH = 3;
         this.weights = this.initWeights();
+
+        // Observation penalty constants
+        this.EARLY_GAME_THRESHOLD = 54; // First ~10 moves
+        this.EARLY_GAME_PENALTY = 500;
+        this.EARLY_GAME_EXCEPTION_TYPE70_COUNT = 6;
+        this.EARLY_GAME_EXCEPTION_PENALTY = 100;
+        this.CONSECUTIVE_OBS_TURNS = 5;
+        this.CONSECUTIVE_OBS_COEFFICIENT = 125;
+        this.OBS_OPPORTUNITY_COST_FIRST = 30;
+        this.OBS_OPPORTUNITY_COST_LAST = 50;
     }
 
     initWeights() {
@@ -63,15 +73,45 @@ window.CpuHard = class CpuHard {
         return count;
     }
 
+    // Check if opponent has any unobserved corner pieces
+    hasOpponentUnobservedCorner(state, player) {
+        const opponent = player === 'black' ? 'white' : 'black';
+        const corners = [[0, 0], [0, 7], [7, 0], [7, 7]];
+
+        for (const [r, c] of corners) {
+            const cell = state.board[r][c];
+            if (cell && cell.color === opponent && !cell.observed) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Count player's unobserved Type 70 pieces (unstable, high flip risk)
+    countUnobservedType70(state, player) {
+        let count = 0;
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                const cell = state.board[r][c];
+                if (cell && cell.color === player && !cell.observed && cell.type === 70) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     // Capture lightweight state
     getGameState(gameMock) {
         return {
             board: gameMock.board.map(row => row.map(cell => cell ? { ...cell } : null)),
             currentPlayer: gameMock.currentPlayer,
             observationsLeft: { ...gameMock.observationsLeft },
-            stats: gameMock.countPieceTypes(gameMock.currentPlayer), // Heuristic stats
             prevMove: gameMock.lastMoveType ? { ...gameMock.lastMoveType } : {},
-            observedThisTurn: false // Track if observation was used in current turn
+            observedThisTurn: gameMock.observedThisTurn || false,
+            currentTurn: gameMock.currentTurn || 0,
+            lastObservationTurn: gameMock.lastObservationTurn ? { ...gameMock.lastObservationTurn } : { black: -Infinity, white: -Infinity },
+            hasUsed50: { ...gameMock.hasUsed50 } // Track usage
         };
     }
 
@@ -88,24 +128,58 @@ window.CpuHard = class CpuHard {
         const legalMoves = this.getLegalMoves(state, state.currentPlayer);
 
         // INTEGRATION: Add "Observe" as a candidate move if available
-        // Only allow observation if: (1) observations left AND (2) NOT already observed this turn
+        // Only allow observation if:
+        // (1) observations left
+        // (2) NOT already observed this turn
+        // (3) there are unobserved pieces on the board (NEW!)
         if (state.observationsLeft[state.currentPlayer] > 0 && !state.observedThisTurn) {
-            legalMoves.push({ action: 'observe' });
+            // Check if there are any unobserved pieces
+            let hasUnobservedPieces = false;
+            for (let r = 0; r < 8 && !hasUnobservedPieces; r++) {
+                for (let c = 0; c < 8 && !hasUnobservedPieces; c++) {
+                    const cell = state.board[r][c];
+                    if (cell && !cell.observed) {
+                        hasUnobservedPieces = true;
+                    }
+                }
+            }
+
+            // Only add observation as an option if there are unobserved pieces
+            if (hasUnobservedPieces) {
+                legalMoves.push({ action: 'observe' });
+            }
         }
 
         if (legalMoves.length === 0) {
             // PASS Logic
             if (state.passedBefore) {
-                // Double pass = Game Over code (handled by game logic usually, but here simulating)
-                // If we simulate double pass, we should score it.
-                // But simplistically just switch turn.
-                // Better: Check if opponent also has no moves -> Game Over.
-                // Assuming simple turn switch for now to avoid infinite recursion risk.
-                const childState = { ...state, currentPlayer: state.currentPlayer === 'black' ? 'white' : 'black', passedBefore: true };
-                // Reduce depth on pass?
+                // Double pass = Game Over
+                // Create proper deep copy of state
+                const childState = {
+                    board: state.board.map(row => row.map(cell => cell ? { ...cell } : null)),
+                    currentPlayer: state.currentPlayer === 'black' ? 'white' : 'black',
+                    observationsLeft: { ...state.observationsLeft },
+                    prevMove: state.prevMove ? { ...state.prevMove } : {},
+                    observedThisTurn: state.observedThisTurn,
+                    currentTurn: state.currentTurn,
+                    lastObservationTurn: state.lastObservationTurn ? { ...state.lastObservationTurn } : {},
+                    hasUsed50: { ...state.hasUsed50 },
+                    passedBefore: true
+                };
                 return this.alphaBeta(childState, depth - 1, alpha, beta, !maximizingPlayer, cpuColor);
             }
-            const childState = { ...state, currentPlayer: state.currentPlayer === 'black' ? 'white' : 'black', passedBefore: true };
+            // First pass - create proper deep copy
+            const childState = {
+                board: state.board.map(row => row.map(cell => cell ? { ...cell } : null)),
+                currentPlayer: state.currentPlayer === 'black' ? 'white' : 'black',
+                observationsLeft: { ...state.observationsLeft },
+                prevMove: state.prevMove ? { ...state.prevMove } : {},
+                observedThisTurn: state.observedThisTurn,
+                currentTurn: state.currentTurn,
+                lastObservationTurn: state.lastObservationTurn ? { ...state.lastObservationTurn } : {},
+                hasUsed50: { ...state.hasUsed50 },
+                passedBefore: true
+            };
             return this.alphaBeta(childState, depth, alpha, beta, !maximizingPlayer, cpuColor);
         }
 
@@ -128,20 +202,39 @@ window.CpuHard = class CpuHard {
                     // Instead, we rely on the "Deep Search Bonus" below.
                     penalty = 0;
 
-                    // Small opportunity cost to prevent trivial observation at very end of game
-                    // and to discourage wasting the first observation too early.
-                    // Small opportunity cost to prevent trivial observation at very end of game
-                    // and to discourage wasting the first observation too early.
                     const observationsRemaining = state.observationsLeft[state.currentPlayer];
-                    if (observationsRemaining === 2) {
-                        penalty += 30; // Mild cost for first observation
+                    const emptyCount = this.countEmptyCells(state.board);
 
-                        // STRICT EARLY GAME CHECK:
-                        // If the board is still very empty (opening), DO NOT OBSERVE.
-                        // It's a waste of a turn and a resource.
-                        const emptyCount = this.countEmptyCells(state.board);
-                        if (emptyCount >= 54) { // First ~10 moves
-                            penalty += 500; //Huge Penalty forces it to wait
+                    // STRICT EARLY GAME CHECK (with strategic exceptions)
+                    // If the board is still very empty (opening), DO NOT OBSERVE unless strategically critical.
+                    if (emptyCount >= this.EARLY_GAME_THRESHOLD) {
+                        let earlyPenalty = this.EARLY_GAME_PENALTY; // Default: strong prohibition
+
+                        // Exception 1: Opponent has unobserved corner (sniper opportunity)
+                        if (this.hasOpponentUnobservedCorner(state, state.currentPlayer)) {
+                            earlyPenalty = 0; // Allow observation to potentially flip corner
+                        }
+                        // Exception 2: Too many unstable Type 70 pieces (risk management)
+                        else if (this.countUnobservedType70(state, state.currentPlayer) >= this.EARLY_GAME_EXCEPTION_TYPE70_COUNT) {
+                            earlyPenalty = this.EARLY_GAME_EXCEPTION_PENALTY; // Greatly reduced penalty - high flip risk
+                        }
+
+                        penalty += earlyPenalty;
+                    }
+
+                    // Opportunity cost based on remaining observations
+                    if (observationsRemaining === 2) {
+                        penalty += this.OBS_OPPORTUNITY_COST_FIRST; // First observation: mild hesitation
+                    } else if (observationsRemaining === 1) {
+                        penalty += this.OBS_OPPORTUNITY_COST_LAST; // Last observation: more conservative
+                    }
+
+                    // CONSECUTIVE OBSERVATION PENALTY (prevents rapid successive observations)
+                    const lastTurn = state.lastObservationTurn[state.currentPlayer];
+                    if (lastTurn !== undefined && lastTurn !== -Infinity) {
+                        const turnsSince = state.currentTurn - lastTurn;
+                        if (turnsSince < this.CONSECUTIVE_OBS_TURNS) {
+                            penalty += (this.CONSECUTIVE_OBS_TURNS - turnsSince) * this.CONSECUTIVE_OBS_COEFFICIENT;
                         }
                     }
                 } else {
@@ -195,13 +288,37 @@ window.CpuHard = class CpuHard {
                     bonus = 0;
 
                     const observationsRemaining = state.observationsLeft[state.currentPlayer];
-                    if (observationsRemaining === 2) {
-                        bonus += 30; // Same mild cost for opponent
+                    const emptyCount = this.countEmptyCells(state.board);
 
-                        // Strict Early Game Check for Opponent too
-                        const emptyCount = this.countEmptyCells(state.board);
-                        if (emptyCount >= 54) {
-                            bonus += 500;
+                    // Strict Early Game Check for Opponent too (with strategic exceptions)
+                    if (emptyCount >= this.EARLY_GAME_THRESHOLD) {
+                        let earlyBonus = this.EARLY_GAME_PENALTY; // Default: strong prohibition
+
+                        // Exception 1: Opponent has unobserved corner (sniper opportunity)
+                        if (this.hasOpponentUnobservedCorner(state, state.currentPlayer)) {
+                            earlyBonus = 0; // Allow observation
+                        }
+                        // Exception 2: Too many unstable Type 70 pieces (risk management)
+                        else if (this.countUnobservedType70(state, state.currentPlayer) >= this.EARLY_GAME_EXCEPTION_TYPE70_COUNT) {
+                            earlyBonus = this.EARLY_GAME_EXCEPTION_PENALTY; // Greatly reduced penalty
+                        }
+
+                        bonus += earlyBonus;
+                    }
+
+                    // Opportunity cost for opponent
+                    if (observationsRemaining === 2) {
+                        bonus += this.OBS_OPPORTUNITY_COST_FIRST; // Same mild cost for opponent's first observation
+                    } else if (observationsRemaining === 1) {
+                        bonus += this.OBS_OPPORTUNITY_COST_LAST; // Same conservative cost for opponent's last observation
+                    }
+
+                    // CONSECUTIVE OBSERVATION PENALTY for opponent
+                    const lastTurn = state.lastObservationTurn[state.currentPlayer];
+                    if (lastTurn !== undefined && lastTurn !== -Infinity) {
+                        const turnsSince = state.currentTurn - lastTurn;
+                        if (turnsSince < this.CONSECUTIVE_OBS_TURNS) {
+                            bonus += (this.CONSECUTIVE_OBS_TURNS - turnsSince) * this.CONSECUTIVE_OBS_COEFFICIENT;
                         }
                     }
                 } else {
@@ -367,16 +484,18 @@ window.CpuHard = class CpuHard {
             for (let c = 0; c < 8; c++) {
                 if (this.isValidMove(state.board, r, c, player)) {
                     // Expand to Types
-                    // Constant branching factor reduction by picking Best Piece Type
                     const type = this.getBestPieceType(state, player, r, c);
                     moves.push({ r, c, type });
                 }
             }
         }
+
+
+
         return moves;
     }
 
-    // Helper to check valid move on statless board
+    // Helper to check valid move on stateless board
     isValidMove(board, r, c, player) {
         if (board[r][c]) return false;
         const opponent = player === 'black' ? 'white' : 'black';
@@ -389,7 +508,7 @@ window.CpuHard = class CpuHard {
                 const cell = board[tr][tc];
                 if (cell && cell.color === opponent) {
                     hasOpponent = true;
-                } else if (cell && cell.color === player) {
+                } else if (cell && (cell.color === player || cell.type === 50)) {
                     if (hasOpponent) return true;
                     break;
                 } else {
@@ -455,10 +574,12 @@ window.CpuHard = class CpuHard {
         const newState = {
             board: state.board.map(row => row.map(cell => cell ? { ...cell } : null)),
             currentPlayer: state.currentPlayer,
-            observationsLeft: { ...state.observationsLeft }, // Proper copy
-            stats: state.stats,
+            observationsLeft: { ...state.observationsLeft },
             prevMove: state.prevMove ? { ...state.prevMove } : {},
-            observedThisTurn: state.observedThisTurn || false // Preserve flag
+            observedThisTurn: state.observedThisTurn || false,
+            currentTurn: (state.currentTurn || 0) + 1,
+            lastObservationTurn: state.lastObservationTurn ? { ...state.lastObservationTurn } : {},
+            hasUsed50: { ...state.hasUsed50 }
         };
 
         // Place Piece
@@ -470,6 +591,12 @@ window.CpuHard = class CpuHard {
 
         // Update prevMove to track what type was just played
         newState.prevMove[state.currentPlayer] = move.type || 70;
+
+        if (move.type === 50) {
+            newState.board[move.r][move.c].color = 'gray'; // Visual placeholder logic
+            newState.board[move.r][move.c].owner = state.currentPlayer;
+            newState.hasUsed50[state.currentPlayer] = true;
+        }
 
         // Flip logic (State update)
         const player = state.currentPlayer;
@@ -483,8 +610,8 @@ window.CpuHard = class CpuHard {
                 const cell = newState.board[tr][tc];
                 if (cell && cell.color === opponent) {
                     path.push([tr, tc]);
-                } else if (cell && cell.color === player) {
-                    // Flip
+                } else if (cell && (cell.color === player || cell.type === 50)) {
+                    // Flip logic (50-koma itself is not flipped)
                     path.forEach(([pr, pc]) => {
                         newState.board[pr][pc].color = player;
                     });
@@ -505,15 +632,20 @@ window.CpuHard = class CpuHard {
             board: state.board.map(row => row.map(cell => cell ? { ...cell } : null)),
             currentPlayer: state.currentPlayer,
             observationsLeft: { ...state.observationsLeft },
-            stats: state.stats,
             prevMove: state.prevMove ? { ...state.prevMove } : {},
-            observedThisTurn: true // Mark that observation was used this turn
+            observedThisTurn: true,
+            currentTurn: state.currentTurn || 0, // Keep same turn (observation doesn't increment)
+            lastObservationTurn: state.lastObservationTurn ? { ...state.lastObservationTurn } : {},
+            hasUsed50: { ...state.hasUsed50 } // Persist usage
         };
 
         // Decrement observation count
         if (newState.observationsLeft[state.currentPlayer] > 0) {
             newState.observationsLeft[state.currentPlayer]--;
         }
+
+        // Track observation turn
+        newState.lastObservationTurn[state.currentPlayer] = state.currentTurn || 0;
 
         // Mark all as observed (Optimistic/Deterministic)
         // Note: Real game does probabilistic flip. Here we assume stability (no flip).
@@ -541,123 +673,5 @@ window.CpuHard = class CpuHard {
             const valB = this.weights[b.r][b.c];
             return valB - valA;
         });
-    }
-
-    evaluateObservation(state, depth) {
-        // Defensive Observation check
-        // If high value pieces are unobserved and could be lost (heuristic), 
-        // suggest observation.
-
-        let unobserved100 = 0;
-        let unobserved90 = 0;
-        let unobservedTotal = 0;
-        let hasUnobservedEdge = false;
-
-        for (let r = 0; r < 8; r++) {
-            for (let c = 0; c < 8; c++) {
-                const cell = state.board[r][c];
-                if (cell && cell.color === state.currentPlayer && !cell.observed) {
-                    unobservedTotal++;
-                    if (cell.type === 100) unobserved100++;
-                    if (cell.type === 90) unobserved90++;
-
-                    // Check Corner/Edge
-                    if (this.weights[r][c] >= 20) {
-                        hasUnobservedEdge = true; // Includes Corners (120) and Edges (20)
-                    }
-                }
-            }
-        }
-
-        // CRITICAL STRATEGY: Quantum Limits (Soft Cap)
-        // If we have too many unstable 90s (5), we might want to observe to free up slots.
-        // But 100s no longer have a hard cap of 2. 
-        // We can keep the 90s cap check as a strategy, but remove the 100s check.
-        if (unobserved90 >= 5) return { shouldObserve: true };
-
-        // STRATEGY: Secure High Value Positions
-        if (hasUnobservedEdge) return { shouldObserve: true };
-
-        // STRATEGY: Volume (Don't let too many pieces remain unstable)
-        if (unobservedTotal >= 4) return { shouldObserve: true };
-
-        // Count-based check (Fixes probability mass issue)
-        // If > 1/8th of board is unstable, observe!
-        if (unobservedTotal >= 8) return { shouldObserve: true };
-
-        return { shouldObserve: false };
-    }
-
-    // New Framework: ETO (Entropy-Triggered Observation)
-    evaluateObservationMove(state, player) {
-        let obsValue = 0;
-
-        let myUnstableCount = 0;
-        let opUnstableCount = 0;
-        let myVolatility = 0; // Weighted risk
-        let opVolatility = 0; // Weighted potential
-        let opHasUnobservedCorner = false;
-
-        const opponent = player === 'black' ? 'white' : 'black';
-
-        for (let r = 0; r < 8; r++) {
-            for (let c = 0; c < 8; c++) {
-                const cell = state.board[r][c];
-                if (cell && !cell.observed) {
-                    const flipProb = (cell.type === 70) ? 0.3 : (cell.type === 90) ? 0.1 : 0;
-                    const weight = Math.abs(this.weights[r][c]); // Absolute strategic weight
-
-                    if (cell.color === player) {
-                        myUnstableCount++;
-                        myVolatility += flipProb * weight;
-                    } else {
-                        opUnstableCount++;
-                        opVolatility += flipProb * weight;
-
-                        // Check for Sniper Target
-                        if (weight >= 100) { // Corner
-                            opHasUnobservedCorner = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        const totalUnstable = myUnstableCount + opUnstableCount;
-
-        // 1. Base Aggression Formula
-        // We value Opponent Volatility (Potential to flip to us) highly.
-        // We value Self Volatility (Risk) less (Calculated Aggression).
-        obsValue += (opVolatility * 2.5) - (myVolatility * 1.0);
-
-        // 2. Chaos Bonus (Thresholds based on COUNT, not Prob Mass)
-        // Previous code used 12.0 Mass (Impossible). Now we use Count.
-        if (totalUnstable >= 12) {
-            obsValue += 150; // Massive Chaos -> Crave Stability/Flip
-        } else if (totalUnstable >= 8) {
-            obsValue += 50;
-        }
-
-        // 3. Early Game / Low Value Penalty
-        if (totalUnstable < 4) {
-            // Unless it's a sniper shot!
-            if (!opHasUnobservedCorner) {
-                obsValue -= 200; // Penalty (Value drops)
-            }
-        }
-
-        // 4. Sniper Bonus (Corner)
-        if (opHasUnobservedCorner) {
-            obsValue += 250; // Huge incentive to flip that corner
-        }
-
-        // 5. Resource Scarcity
-        const obsLeft = state.observationsLeft[player];
-        if (obsLeft === 2) {
-            // Slight hesitation to use the first one unless value is high
-            obsValue -= 50;
-        }
-
-        return obsValue;
     }
 };

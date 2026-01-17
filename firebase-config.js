@@ -13,3 +13,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 window.db = firebase.database();
 window.auth = firebase.auth();
+
+// App Check - Smart configuration (auto-enables on GitHub Pages, disables on localhost)
+if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    const appCheck = firebase.appCheck();
+    appCheck.activate('6LdW6U0sAAAAAOADVKXDefpkIwLdSgRevSvJBZI5', true);
+    console.log('App Check enabled for production');
+} else {
+    console.log('App Check disabled for local development');
+}
+

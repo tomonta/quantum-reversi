@@ -4,8 +4,7 @@
 **量子リバーシ「Quversi」のソースコードリポジトリです。**
 
 ## 🎮 ゲームをプレイ
-**[ここをクリックしてゲームをプレイ (GitHub Pages)](https://tomonta.github.io/quversi/)**
-*(※URLの `tomonta.github.io` の部分はあなたのリポジトリ設定に合わせて自動的に変わりますが、基本的には `https://<ユーザー名>.github.io/<リポジトリ名>/` になります)*
+**[ここをクリックしてゲームをプレイ (GitHub Pages)](https://tomonta.github.io/quantum-reversi/)]**
 
 ## ✨ 特徴
 - **量子重ね合わせ**: 70%や90%の確率で色が変わるコマが登場。

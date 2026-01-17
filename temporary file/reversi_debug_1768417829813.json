@@ -1,0 +1,350 @@
+{
+  "version": "v2.0.0-cpu",
+  "gameMode": "cpu-hard",
+  "myRole": "black",
+  "currentPlayer": "black",
+  "moveHistory": [
+    {
+      "turn": 1,
+      "player": "black",
+      "r": 4,
+      "c": 5,
+      "type": 70,
+      "fen": "......../......../......../...WB.../...BWB../......../......../........"
+    },
+    {
+      "turn": 2,
+      "player": "white",
+      "r": 5,
+      "c": 3,
+      "type": 70,
+      "fen": "......../......../......../...WB.../...BBB../...W..../......../........"
+    },
+    {
+      "turn": 3,
+      "player": "black",
+      "r": 3,
+      "c": 2,
+      "type": 70,
+      "fen": "......../......../......../..BWB.../...WBB../...W..../......../........"
+    },
+    {
+      "turn": 4,
+      "player": "white",
+      "r": 2,
+      "c": 3,
+      "type": 90,
+      "fen": "......../......../...W..../..BBB.../...WBB../...W..../......../........"
+    },
+    {
+      "turn": 5,
+      "player": "black",
+      "r": 4,
+      "c": 2,
+      "type": 90,
+      "fen": "......../......../...W..../..BWB.../..BWBB../...W..../......../........"
+    },
+    {
+      "turn": 6,
+      "player": "white",
+      "r": 5,
+      "c": 6,
+      "type": 70,
+      "fen": "......../......../...W..../..BWB.../..BBBB../...W..W./......../........"
+    },
+    {
+      "turn": 7,
+      "player": "black",
+      "r": 1,
+      "c": 4,
+      "type": 70,
+      "fen": "......../....B.../...W..../..BWW.../..BBBW../...W..W./......../........"
+    },
+    {
+      "turn": 8,
+      "player": "white",
+      "r": 4,
+      "c": 1,
+      "type": 90,
+      "fen": "......../....B.../...B..../..BWW.../.WBBBW../...W..W./......../........"
+    },
+    {
+      "turn": 9,
+      "player": "black",
+      "r": 5,
+      "c": 0,
+      "type": 90,
+      "fen": "......../....B.../...B..../..BWW.../.WWWWW../B..W..W./......../........"
+    },
+    {
+      "turn": 10,
+      "player": "white",
+      "r": 2,
+      "c": 1,
+      "type": 70,
+      "fen": "......../....B.../.W.B..../..BWW.../.BWWWB../B..B..B./......../........"
+    },
+    {
+      "turn": 11,
+      "player": "black",
+      "r": 3,
+      "c": 1,
+      "type": 70,
+      "fen": "......../....B.../.W.B..../.BWWW.../.BWWWB../B..B..B./......../........"
+    },
+    {
+      "turn": 12,
+      "player": "white",
+      "r": 3,
+      "c": 0,
+      "type": 90,
+      "fen": "......../....B.../.W.B..../WBWWW.../.BBWWB../B..B..B./......../........"
+    },
+    {
+      "turn": 13,
+      "player": "black",
+      "r": 3,
+      "c": 5,
+      "type": 70,
+      "fen": "......../....B.../.W.B..../WWWWWB../.BBWWB../B..B..B./......../........"
+    },
+    {
+      "turn": 14,
+      "player": "white",
+      "r": 0,
+      "c": 5,
+      "type": 70,
+      "fen": ".....W../....B.../.B.B..../WBWWWW../.BBWBB../B..B..B./......../........"
+    },
+    {
+      "turn": 15,
+      "player": "black",
+      "r": 3,
+      "c": 6,
+      "type": 70,
+      "fen": ".....W../....W.../.B.W..../WBWWWWB./.BBWBB../B..B..B./......../........"
+    },
+    {
+      "turn": 16,
+      "player": "white",
+      "r": 3,
+      "c": 7,
+      "type": 90,
+      "fen": ".....W../....W.../.B.W..../WBBBBBBW/.BBWBB../B..B..B./......../........"
+    },
+    {
+      "turn": 17,
+      "player": "black",
+      "r": 2,
+      "c": 7,
+      "type": 70,
+      "fen": ".....W../....W.../.B.W...B/WWWWWWWW/.BBWBB../B..B..B./......../........"
+    },
+    {
+      "turn": 18,
+      "player": "white",
+      "r": 5,
+      "c": 5,
+      "type": 70,
+      "fen": ".....W../....W.../.B.W...B/WWWWWWBW/.BBWBB../B..B.WB./......../........"
+    },
+    {
+      "turn": 19,
+      "player": "black",
+      "r": 2,
+      "c": 6,
+      "type": 70,
+      "fen": ".....W../....W.../.B.W..BB/WWWWWWBW/.BBWWW../B..B.WB./......../........"
+    },
+    {
+      "turn": 20,
+      "player": "white",
+      "r": 5,
+      "c": 7,
+      "type": 100,
+      "fen": ".....W../....W.../.B.W..BB/WWWWWBBW/.BBWBW../B..B.WBW/......../........"
+    },
+    {
+      "turn": 21,
+      "player": "black",
+      "r": 6,
+      "c": 5,
+      "type": 70,
+      "fen": ".....W../....W.../.B.W..BB/WWWWWBBW/.BBWBW../B..B.WWW/.....B../........"
+    },
+    {
+      "turn": 22,
+      "player": "white",
+      "r": 5,
+      "c": 4,
+      "type": 70,
+      "fen": ".....W../....W.../.B.W..BB/WWWWWBBW/.BBWBB../B..BWBWW/.....B../........"
+    },
+    {
+      "turn": 23,
+      "player": "black",
+      "r": 4,
+      "c": 7,
+      "type": 70,
+      "fen": ".....W../....W.../.B.W..BB/WWWWWBBW/.BBWWB.B/B..BWWWW/.....B../........"
+    },
+    {
+      "turn": 24,
+      "player": "white",
+      "r": 1,
+      "c": 7,
+      "type": 90,
+      "fen": ".....W../....W..W/.B.W..BB/WWWWWBBB/.BBWWB.B/B..BWWBW/.....B../........"
+    },
+    {
+      "turn": 25,
+      "player": "black",
+      "r": 2,
+      "c": 0,
+      "type": 90,
+      "fen": ".....W../....W..W/BB.W..WW/WWWWWWBW/.BBWWB.W/B..BWWBW/.....B../........"
+    },
+    {
+      "turn": 26,
+      "player": "white",
+      "r": 4,
+      "c": 0,
+      "type": 90,
+      "fen": ".....W../....W..W/BB.W..WW/WBWWWWBW/WBBWWB.W/B..BWWBW/.....B../........"
+    },
+    {
+      "turn": 27,
+      "player": "black",
+      "r": 1,
+      "c": 6,
+      "type": 90,
+      "fen": ".....W../....W.BW/BB.W..WW/WBWWWWBW/WWWWWB.W/B..BWWBW/.....B../........"
+    },
+    {
+      "turn": 28,
+      "player": "white",
+      "r": 6,
+      "c": 2,
+      "type": 90,
+      "fen": ".....W../....W.BW/BB.W..BW/WBWWWWBW/WWWWWB.W/B..BWWBW/..W..B../........"
+    },
+    {
+      "turn": 29,
+      "player": "black",
+      "r": 1,
+      "c": 2,
+      "type": 90,
+      "fen": ".....W../..B.W.BW/BB.W..BW/WBWWWWBW/WWWWWB.W/B..WWWBW/..W..B../........"
+    },
+    {
+      "turn": 30,
+      "player": "white",
+      "r": 7,
+      "c": 4,
+      "type": 90,
+      "fen": ".....W../..B.W.BW/BB.B..BW/WBWWBWBW/WWWWWB.W/B..WWWBW/..W..B../....W..."
+    },
+    {
+      "turn": 31,
+      "player": "black",
+      "r": 2,
+      "c": 5,
+      "type": 70,
+      "fen": ".....W../..B.W.BW/BB.B.BBW/WBWWBWBW/WWWWWB.W/B..WWWWW/..W..W../....W..."
+    },
+    {
+      "turn": 32,
+      "player": "white",
+      "r": 0,
+      "c": 3,
+      "type": 90,
+      "fen": "...W.W../..B.W.BW/BB.B.BBW/WBWWBBBW/WWWWWB.W/B..WWWWW/..W..W../....W..."
+    }
+  ],
+  "currentBoard": [
+    [
+      "--",
+      "--",
+      "--",
+      "W90",
+      "--",
+      "W70",
+      "--",
+      "--"
+    ],
+    [
+      "--",
+      "--",
+      "W90",
+      "--",
+      "W70*",
+      "--",
+      "B90",
+      "W90"
+    ],
+    [
+      "B90",
+      "W70*",
+      "--",
+      "B90*",
+      "--",
+      "B70",
+      "B70",
+      "W70"
+    ],
+    [
+      "W90*",
+      "B70*",
+      "W70*",
+      "W100*",
+      "B100*",
+      "B70*",
+      "B70",
+      "W90"
+    ],
+    [
+      "W90",
+      "W90*",
+      "W90*",
+      "W100*",
+      "W100*",
+      "B70*",
+      "--",
+      "W70"
+    ],
+    [
+      "B90*",
+      "--",
+      "--",
+      "W70*",
+      "W70",
+      "W70",
+      "W70*",
+      "W100"
+    ],
+    [
+      "--",
+      "--",
+      "W90",
+      "--",
+      "--",
+      "W70",
+      "--",
+      "--"
+    ],
+    [
+      "--",
+      "--",
+      "--",
+      "--",
+      "W90",
+      "--",
+      "--",
+      "--"
+    ]
+  ],
+  "observations": {
+    "black": 2,
+    "white": 0
+  }
+}

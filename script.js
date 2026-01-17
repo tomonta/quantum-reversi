@@ -205,9 +205,18 @@ class Reversi {
                         <li><strong>90%コマ</strong>: 10%の確率で色が反転します。</li>
                         <li><strong>70%コマ</strong>: 30%の確率で色が反転します。</li>
                     </ul>
+
                     <h3>50%コマ (ジョーカー)</h3>
-                    <p>4ターン目でチャージ完了（円グラフ表示）。<strong>1回だけ</strong>使えます。通常の手がない時の救済（スキップ）としても使用可能です。</p>
-                    <p>観測は1ゲームにつき<strong>2回</strong>まで使えます。相手の計算を狂わせる強力な武器です！</p>
+                    <p>4ターン目でチャージ完了（円グラフ）。<strong>1回だけ</strong>使えます。</p>
+                    <p><strong>特徴:</strong></p>
+                    <ul>
+                        <li><strong>自分または相手が置ける場所</strong>ならどこにでも置けます（お邪魔キャラとして使用可能！）</li>
+                        <li><strong>双方の色として機能</strong>するため、接する相手の石を挟めます。</li>
+                        <li><strong>50%コマ自体は反転しません</strong>（置いた瞬間は確定しないため）。</li>
+                        <li>観測すると、50%の確率で黒または白に確定します。</li>
+                    </ul>
+                    <p>観測は1ゲームにつき<strong>2回</strong>まで使えます（50%コマ使用とは別カウントです）。</p>
+
                 `,
                 // Lobby Status
                 creatingGame: "ゲームを作成中...",
@@ -871,6 +880,7 @@ class Reversi {
         this.btn100.classList.toggle('active', type === 100);
 
         this.updateControlsState(); // Trigger visual update (especially for 50-koma styles)
+        this.updateValidMoves(); // Refresh valid move highlights (crucial for 50-koma)
     }
 
     updateControlsState() {
@@ -1096,6 +1106,7 @@ class Reversi {
         }
 
         // Unlock Board
+        const boardEl = document.querySelector('.board');
         if (boardEl) boardEl.style.pointerEvents = 'auto';
 
         this.renderBoard();

@@ -1,0 +1,574 @@
+{
+  "version": "v2.0.0-cpu",
+  "gameMode": "cpu-hard",
+  "myRole": "black",
+  "currentPlayer": "white",
+  "moveHistory": [
+    {
+      "turn": 1,
+      "player": "black",
+      "r": 4,
+      "c": 5,
+      "type": 70,
+      "fen": "......../......../......../...WB.../...BWB../......../......../........"
+    },
+    {
+      "turn": 2,
+      "player": "white",
+      "r": 5,
+      "c": 3,
+      "type": 70,
+      "fen": "......../......../......../...WB.../...BBB../...W..../......../........"
+    },
+    {
+      "turn": 3,
+      "player": "black",
+      "r": 3,
+      "c": 2,
+      "type": 70,
+      "fen": "......../......../......../..BWB.../...WBB../...W..../......../........"
+    },
+    {
+      "turn": 4,
+      "player": "white",
+      "r": 2,
+      "c": 3,
+      "type": 90,
+      "fen": "......../......../...W..../..BBB.../...WBB../...W..../......../........"
+    },
+    {
+      "turn": 5,
+      "player": "black",
+      "r": 1,
+      "c": 2,
+      "type": 90,
+      "fen": "......../..B...../...W..../..BWB.../...WBB../...W..../......../........"
+    },
+    {
+      "turn": 6,
+      "player": "white",
+      "r": 1,
+      "c": 3,
+      "type": 90,
+      "fen": "......../..BW..../...B..../..BWB.../...WBB../...W..../......../........"
+    },
+    {
+      "turn": 7,
+      "player": "black",
+      "r": 1,
+      "c": 4,
+      "type": 90,
+      "fen": "......../..BWB.../...W..../..BWB.../...WBB../...W..../......../........"
+    },
+    {
+      "turn": 8,
+      "player": "white",
+      "r": 2,
+      "c": 5,
+      "type": 90,
+      "fen": "......../..BBB.../...B.W../..BWB.../...WBB../...W..../......../........"
+    },
+    {
+      "turn": 9,
+      "player": "black",
+      "r": 6,
+      "c": 3,
+      "type": 70,
+      "fen": "......../..BBB.../...B.W../..BWW.../...WBB../...W..../...B..../........"
+    },
+    {
+      "turn": 10,
+      "player": "white",
+      "r": 5,
+      "c": 2,
+      "type": 70,
+      "fen": "......../..BBB.../...B.W../..BBW.../...BBB../..WB..../...B..../........"
+    },
+    {
+      "turn": 11,
+      "player": "black",
+      "r": 2,
+      "c": 4,
+      "type": 70,
+      "fen": "......../..BBB.../...BBW../..BBW.../...WBB../..WB..../...B..../........"
+    },
+    {
+      "turn": 12,
+      "player": "white",
+      "r": 2,
+      "c": 1,
+      "type": 100,
+      "fen": "......../..BBB.../.W.BBW../..BBB.../...WBB../..WB..../...B..../........"
+    },
+    {
+      "turn": 13,
+      "player": "black",
+      "r": 2,
+      "c": 6,
+      "type": 100,
+      "fen": "......../..BBB.../.W.BBWB./..WBB.../...WBB../..WB..../...B..../........"
+    },
+    {
+      "turn": 14,
+      "player": "white",
+      "r": 0,
+      "c": 5,
+      "type": 90,
+      "fen": ".....W../..BBB.../.W.BBBB./..WBB.../...WBB../..WB..../...B..../........"
+    },
+    {
+      "turn": 15,
+      "player": "black",
+      "r": 1,
+      "c": 5,
+      "type": 90,
+      "fen": ".....W../..BBWB../.W.WBBB./..WBB.../...WBB../..WB..../...B..../........"
+    },
+    {
+      "turn": 16,
+      "player": "white",
+      "r": 4,
+      "c": 6,
+      "type": 70,
+      "fen": ".....W../..BBBW../.W.WBBB./..BBB.../...WBBW./..WB..../...B..../........"
+    },
+    {
+      "turn": 17,
+      "player": "black",
+      "r": 5,
+      "c": 4,
+      "type": 70,
+      "fen": ".....W../..BBBW../.W.WBBB./..BBB.../...WWWW./..WBB.../...B..../........"
+    },
+    {
+      "turn": 18,
+      "player": "white",
+      "r": 7,
+      "c": 2,
+      "type": 90,
+      "fen": ".....W../..BBBW../.W.WBBB./..BBB.../...BBWW./..WBB.../...B..../..W....."
+    },
+    {
+      "turn": 19,
+      "player": "black",
+      "r": 4,
+      "c": 7,
+      "type": 70,
+      "fen": ".....W../..BBBW../.W.WBBB./..BBB.../...BBWWB/..WBW.../...W..../..W....."
+    },
+    {
+      "turn": 20,
+      "player": "white",
+      "r": 1,
+      "c": 1,
+      "type": 70,
+      "fen": ".....W../.WBBBW../.W.WBBB./..BBB.../...BBBWW/..WBB.../...W..../..W....."
+    },
+    {
+      "turn": 21,
+      "player": "black",
+      "r": 0,
+      "c": 2,
+      "type": 70,
+      "fen": "..B..W../.WWWWW../.W.WBBB./..BBB.../...BBBWW/..WBB.../...W..../..W....."
+    },
+    {
+      "turn": 22,
+      "player": "white",
+      "r": 6,
+      "c": 5,
+      "type": 90,
+      "fen": "..B..W../.WWBWW../.W.WBBB./..BBB.../...BBBWW/..WBB.../...W.W../..W....."
+    },
+    {
+      "turn": 23,
+      "player": "black",
+      "r": 6,
+      "c": 4,
+      "type": 90,
+      "fen": "..B..W../.WWBWW../.W.WBBB./..WBB.../...WBBWW/..WBW.../...WBW../..W....."
+    },
+    {
+      "turn": 24,
+      "player": "white",
+      "r": 3,
+      "c": 6,
+      "type": 70,
+      "fen": "..B..W../.WWBWW../.W.WBBB./..WBB.W./...WBBWW/..WBB.../...WBW../..W....."
+    },
+    {
+      "turn": 25,
+      "player": "black",
+      "r": 6,
+      "c": 6,
+      "type": 70,
+      "fen": "..B..W../.WWBWW../.W.WBWB./..WBB.W./...WBWWW/..WBW.../...WBWB./..W....."
+    },
+    {
+      "turn": 26,
+      "player": "white",
+      "r": 6,
+      "c": 7,
+      "type": 90,
+      "fen": "..B..W../.WWBWW../.W.WBWB./..WBB.W./...WBWWW/..WBW.../...WBBBW/..W....."
+    },
+    {
+      "turn": 27,
+      "player": "black",
+      "r": 5,
+      "c": 6,
+      "type": 90,
+      "fen": "..B..W../.WWBWW../.W.WBWB./..WBB.W./...WBWWW/..WBW.B./...WWWWW/..W....."
+    },
+    {
+      "turn": 28,
+      "player": "white",
+      "r": 1,
+      "c": 6,
+      "type": 70,
+      "fen": "..B..W../.WWBWWW./.W.WBWB./..WBB.B./...WBBBW/..WBW.B./...WWWWW/..W....."
+    },
+    {
+      "turn": 29,
+      "player": "black",
+      "r": 7,
+      "c": 5,
+      "type": 70,
+      "fen": "..B..W../.WWBWWW./.W.WBWW./..WBB.W./...WBBWW/..WBW.W./...WWWWW/..W..B.."
+    },
+    {
+      "turn": 30,
+      "player": "white",
+      "r": 7,
+      "c": 4,
+      "type": 100,
+      "fen": "..B..W../.WWBWWW./.W.WBWW./..WBB.W./...WBBWW/..WBW.W./...WBWWW/..W.WB.."
+    },
+    {
+      "turn": 31,
+      "player": "black",
+      "r": 5,
+      "c": 7,
+      "type": 70,
+      "fen": "..B..W../.WWBWWW./.W.WBWW./..WBB.W./...WBBWW/..WBW.WB/...WWWWW/..W.WB.."
+    },
+    {
+      "turn": 32,
+      "player": "white",
+      "r": 7,
+      "c": 6,
+      "type": 70,
+      "fen": "..B..W../.WWBWWW./.W.WBWW./..WBB.W./...WBBWW/..WBW.WB/...WWWBW/..W.WBW."
+    },
+    {
+      "turn": 33,
+      "player": "black",
+      "r": 7,
+      "c": 7,
+      "type": 70,
+      "fen": "..B..W../.WWBWWW./.W.WBWW./..WBB.W./...WBBWW/..WBW.WB/...WWWWW/..W.WWWB"
+    },
+    {
+      "turn": 34,
+      "player": "white",
+      "r": 0,
+      "c": 3,
+      "type": 100,
+      "fen": "..BW.W../.WWBWWW./.W.WBWW./..WBB.W./...WBBWW/..WBW.WB/...WWWWB/..W.WWWB"
+    },
+    {
+      "turn": 35,
+      "player": "black",
+      "r": 7,
+      "c": 3,
+      "type": 100,
+      "fen": "..BW.W../.WWWWWW./.W.WBWW./..WBB.W./...WBBWW/..WBW.WB/...WWWWB/..WBWWWB"
+    },
+    {
+      "turn": 36,
+      "player": "white",
+      "r": 0,
+      "c": 1,
+      "type": 90,
+      "fen": ".WBW.W../.WWWWWW./.W.WBWW./..WBB.W./...WBBWW/..WBW.WB/...BWWWB/..WBBBBB"
+    },
+    {
+      "turn": 37,
+      "player": "black",
+      "r": 0,
+      "c": 7,
+      "type": 90,
+      "fen": ".WWW.W.B/.WWWWWW./.W.WBWW./..WBB.W./...WBBWW/..WBW.WB/...BWWWB/..WBBBBB"
+    },
+    {
+      "turn": 38,
+      "player": "white",
+      "r": 0,
+      "c": 6,
+      "type": 70,
+      "fen": ".WWW.WWB/.WWWWWB./.W.WBBW./..WBB.W./...WBBWW/..WBW.WB/...BWWWB/..WBBBBB"
+    },
+    {
+      "turn": 39,
+      "player": "black",
+      "r": 0,
+      "c": 4,
+      "type": 70,
+      "fen": ".WWWBWWB/.WWWWWW./.W.WBBW./..WBB.W./...WBBWW/..WBW.WB/...BWWWB/..WBBBBB"
+    },
+    {
+      "turn": 40,
+      "player": "white",
+      "r": 6,
+      "c": 2,
+      "type": 100,
+      "fen": ".WWWBBBB/.WWWBWW./.W.WBBW./..WBB.W./...WBBWW/..WBW.WB/..WBWWWB/..WBBBBB"
+    },
+    {
+      "turn": 41,
+      "player": "black",
+      "r": 0,
+      "c": 0,
+      "type": 70,
+      "fen": "BWWWBBBB/.WWWBWW./.W.WBBW./..WBB.W./...WBBWW/..WBW.WB/..WWWWWB/..WBBBBB"
+    },
+    {
+      "turn": 42,
+      "player": "white",
+      "r": 4,
+      "c": 2,
+      "type": 90,
+      "fen": "BBBBBBBB/.WWWBWW./.W.WBBW./..WBB.W./..WWBBWW/..WBW.WB/..WWWWWB/..WBBBBB"
+    },
+    {
+      "turn": 43,
+      "player": "black",
+      "r": 1,
+      "c": 7,
+      "type": 90,
+      "fen": "BBBBBBBB/.WWWBWWB/.W.WWBW./..WWB.W./..WWBBWW/..WWW.WB/..WWWWWB/..WBBBBB"
+    },
+    {
+      "turn": 44,
+      "player": "white",
+      "r": 3,
+      "c": 5,
+      "type": 70,
+      "fen": "BBBBBBBB/.WWWBBBB/.W.WWBW./..WWBWW./..WWBBWW/..WWW.WB/..WWWWWB/..WBBBBB"
+    },
+    {
+      "turn": 45,
+      "player": "black",
+      "r": 1,
+      "c": 0,
+      "type": 70,
+      "fen": "BBBBBBBB/BWWWBBBB/.W.WWBW./..WWWWW./..WWWBWW/..WWW.WB/..WWWWWB/..WBBBBB"
+    },
+    {
+      "turn": 46,
+      "player": "white",
+      "r": 2,
+      "c": 2,
+      "type": 100,
+      "fen": "BBBBBBBB/BBBBBBBB/.BWWWBW./..BWWWW./..WBWBWW/..WWB.WB/..WWWBWB/..WBBBBB"
+    },
+    {
+      "turn": 47,
+      "player": "black",
+      "r": 2,
+      "c": 7,
+      "type": 100,
+      "fen": "BBBBBBBB/BBBBBBBB/.BWWWBWB/..WWWWW./..WBWBWW/..WWB.WB/..WWWBWB/..WBBBBB"
+    },
+    {
+      "turn": 48,
+      "player": "white",
+      "r": 3,
+      "c": 7,
+      "type": 70,
+      "fen": "BBBBBBBB/BBBBBBBB/.BWWWBBB/..WWWWBW/..WBWBWW/..WWB.WB/..WWWBWB/..WBBBBB"
+    },
+    {
+      "turn": 49,
+      "player": "black",
+      "r": 3,
+      "c": 1,
+      "type": 70,
+      "fen": "BBBBBBBB/BBBBBBBB/.BWWWBBB/.BWWWWWW/..WBWBWW/..WWB.WB/..WWWBWB/..WBBBBB"
+    },
+    {
+      "turn": 50,
+      "player": "white",
+      "r": 5,
+      "c": 1,
+      "type": 90,
+      "fen": "BBBBBBBB/BBBBBBBB/.BBWWBBB/.BWWWWWW/..BBWBWW/.WWBB.WB/..WWBBWB/..WBBBBB"
+    },
+    {
+      "turn": 51,
+      "player": "black",
+      "r": 5,
+      "c": 0,
+      "type": 90,
+      "fen": "BBBBBBBB/BBBBBBBB/.BBWWBBB/.BWWWWWW/..WBWBWW/BWWBB.WB/..WWBBWB/..WBBBBB"
+    },
+    {
+      "turn": 52,
+      "player": "white",
+      "r": 6,
+      "c": 1,
+      "type": 90,
+      "fen": "BBBBBBBB/BBBBBBBB/.BBWWBBB/.BWWWWWW/..WBWBWW/BBBBB.WB/.WWWBBWB/..WBBBBB"
+    },
+    {
+      "turn": 53,
+      "player": "black",
+      "r": 5,
+      "c": 5,
+      "type": 90,
+      "fen": "BBBBBBBB/BBBBBBBB/.BBWWBBB/.BWWWWWW/..WWWBWW/BBWBBBWB/.WWWBBWB/..WBBBBB"
+    },
+    {
+      "turn": 54,
+      "player": "white",
+      "r": 4,
+      "c": 1,
+      "type": 90,
+      "fen": "BBBBBBBB/BBBBBBBB/.BBWWBBB/.BWBWWWW/.WWWBBWW/BBWBBBBB/.WWWBBBB/..WBBBBB"
+    },
+    {
+      "turn": 55,
+      "player": "black",
+      "r": 7,
+      "c": 0,
+      "type": 90,
+      "fen": "BBBBBBBB/BBBBBBBB/.BBWWBBB/.BWBWWWW/.WWWBBWW/BWWBBBBB/.WWWBBBB/B.WBBBBB"
+    },
+    {
+      "turn": 56,
+      "player": "white",
+      "r": 3,
+      "c": 0,
+      "type": 70,
+      "fen": "BBBBBBBB/BBBBBBBB/.BBWWBBB/WBWBBWWW/.WWBBBWW/BWBBBBBB/.BWWBBBB/B.WBBBBB"
+    },
+    {
+      "turn": 57,
+      "player": "black",
+      "r": 7,
+      "c": 1,
+      "type": 70,
+      "fen": "BBBBBBBB/BBBBBBBB/.BBWWBBB/WWWBBWWW/.WWBBBWW/BWBBBBBB/.BWWBBBB/BBWBBBBB"
+    },
+    {
+      "turn": 58,
+      "player": "white",
+      "r": 2,
+      "c": 0,
+      "type": 100,
+      "fen": "BBBBBBBB/BBBBBBBB/WBBWWBBB/WWWBBWWW/.WWBBBWW/BWBBBBBB/.BBWBBBB/BBBBBBBB"
+    },
+    {
+      "turn": 59,
+      "player": "black",
+      "r": 4,
+      "c": 0,
+      "type": 100,
+      "fen": "BBBBBBBB/BBBBBBBB/WWWWWBBB/WWWBBWWW/BWWBBBWW/BWBBBBBB/.BBWBBBB/BBBBBBBB"
+    },
+    {
+      "turn": 60,
+      "player": "white",
+      "r": 6,
+      "c": 0,
+      "type": 90,
+      "fen": "BBBBBBBB/BBBBBBBB/BWBWWBBB/BBWBBWWW/BBBBBBWW/BBBBBBBB/WBBWBBBB/BBBBBBBB"
+    }
+  ],
+  "currentBoard": [
+    [
+      "B70",
+      "B90",
+      "B70",
+      "B100",
+      "B70",
+      "B90*",
+      "B70",
+      "B90"
+    ],
+    [
+      "B70",
+      "B70",
+      "B90*",
+      "B90*",
+      "B90*",
+      "B90*",
+      "B70",
+      "B90"
+    ],
+    [
+      "B100",
+      "W100*",
+      "B100",
+      "W90*",
+      "W70*",
+      "B90*",
+      "B100*",
+      "B100"
+    ],
+    [
+      "B70",
+      "B70",
+      "W70*",
+      "W100*",
+      "B100*",
+      "W70",
+      "W70",
+      "W70"
+    ],
+    [
+      "B100",
+      "B90",
+      "W90",
+      "B100*",
+      "B100*",
+      "B70*",
+      "W70*",
+      "W70*"
+    ],
+    [
+      "B90",
+      "W90",
+      "B70*",
+      "B70*",
+      "B70*",
+      "B90",
+      "B90",
+      "B70"
+    ],
+    [
+      "W90",
+      "W90",
+      "W100",
+      "W70*",
+      "B90",
+      "B90",
+      "B70",
+      "B90"
+    ],
+    [
+      "B90",
+      "B70",
+      "B90*",
+      "B100",
+      "B100",
+      "B70",
+      "B70",
+      "B70"
+    ]
+  ],
+  "observations": {
+    "black": 2,
+    "white": 0
+  }
+}
